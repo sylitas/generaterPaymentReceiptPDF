@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<style>
+  html {
+    font-size: $fontSize;
+  }
+
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  td,
+  th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+  .center {
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    text-align: center;
+  }
+
+  #element1 {
+    display: inline-block;
+    margin-block: 0;
+    margin-right: 150px;
+  }
+
+  #element2 {
+    display: inline-block;
+  }
+
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Create two equal columns that floats next to each other */
+  .column {
+    float: left;
+    width: 50%;
+    padding: 10px;
+    height: auto;
+    /* Should be removed. Only for demonstration */
+  }
+
+  /* Clear floats after the columns */
+  .row:after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+</style>
+
+<head>
+  <meta charset="utf-8" />
+</head>
+
+<body>
+  <div class="header" style="width: 100%;">
+    <img src="http://localhost:3000/logo.png" width="$wxh" height="$wxh"
+      style="z-index: 99;float: left;margin-left: $spaceLeft;">
+    <h4 class="center">
+      <nobr><u><b>BÁO CÁO BÁN HÀNG HÀNG NGÀY</b></u></nobr>
+    </h4>
+    <br>
+    <i>Công ty TNHH Phát triển TM & DV Xuân Duy</i>
+    <br>
+    <i>Địa chỉ: {{address}}, SĐT : {{phone}}</i>
+    <br>
+    <p id="element1" style="margin-right: 200px;">Nhân viên bán hàng: {{employeeName}} </p>
+    <p id="element1">SĐT: {{employeePhone}}</p>
+  </div>
+  <div class="table" style="width: 100%;">
+    <table>
+      <tr>
+        <td><b>Stt</b></td>
+        <td><b>Tên sản phẩm</b></td>
+        <td><b>SL hàng nhận (Gói)</b></td>
+        <td><b>SL hàng trả lại (Gói)</b></td>
+        <td><b>SL hàng bán (Gói)</b></td>
+        <td><b>Đơn giá (Vnđ)</b></td>
+        <td><b>Thành tiền</b></td>
+      </tr>
+      {{#each tobaccos}}
+      <tr>
+        <td>{{this.stt}}</td>
+        <td><b>{{this.name}}</b></td>
+        <td>{{this.info.receive}}</td>
+        <td>{{this.info.return}}</td>
+        <td>{{this.info.sold}}</td>
+        <td>{{this.info.price}}</td>
+        <td>{{this.info.total}}</td>
+      </tr>
+      {{/each}}
+      <tr>
+        <td></td>
+        <td><b>Tổng</b></td>
+        <td>{{total.receive}}</td>
+        <td>{{total.return}}</td>
+        <td>{{total.sold}}</td>
+        <td></td>
+        <td>{{total.total}}</td>
+      </tr>
+    </table>
+  </div>
+
+  <p style="margin-block:0px 0px; width: 100%;">Ngày {{day}} Tháng {{month}} Năm {{year}}</p>
+
+  <div class="footer row">
+    <div class="nvbh column" style="text-align: center;">
+      <p><b>Nhân viên bán hàng</b></p>
+      <p>( Ký xác nhận )</p>
+      <img id="pic" src="$imgSrc" width="auto" height="60">
+      <p><b>{{employeeName}}</b></p>
+    </div>
+    <div class="tktq column" style="text-align: center;">
+      <p><b>Thủ kho/Thủ quỹ</b></p>
+      <p>( Ký xác nhận )</p>
+    </div>
+  </div>
+</body>
+
+</html>

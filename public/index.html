@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Job Application Form</title>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+    integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <style>
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body,
+    div,
+    form,
+    input,
+    select,
+    p {
+      padding: 0;
+      margin: 0;
+      outline: none;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 22px;
+    }
+
+    h1 {
+      position: absolute;
+      margin: 0;
+      font-size: 38px;
+      color: #fff;
+      z-index: 2;
+    }
+
+    p.top-info {
+      margin: 10px 0;
+    }
+
+    .testbox {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: inherit;
+      padding: 20px;
+    }
+
+    form {
+      width: 100%;
+      padding: 20px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 0 25px 0 #1c87c9;
+    }
+
+    .banner {
+      position: relative;
+      height: 210px;
+      background-image: url("https://source.unsplash.com/featured/300x201");
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .banner::after {
+      content: "";
+      background-color: rgba(0, 0, 0, 0.6);
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    input,
+    select,
+    textarea {
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    input {
+      width: calc(100% - 10px);
+      padding: 5px;
+    }
+
+    input[type="date"] {
+      padding: 4px 5px;
+    }
+
+    select {
+      width: 100%;
+      padding: 7px 0;
+      background: transparent;
+    }
+
+    .item:hover p,
+    .item:hover i,
+    .question:hover p,
+    .question label:hover,
+    input:hover::placeholder {
+      color: #1c87c9;
+    }
+
+    .item input:hover,
+    .item select:hover {
+      border: 1px solid transparent;
+      box-shadow: 0 0 6px 0 #1c87c9;
+      color: #1c87c9;
+    }
+
+    .item {
+      position: relative;
+      margin: 10px 0;
+    }
+
+    input[type="date"]::-webkit-inner-spin-button {
+      display: none;
+    }
+
+    .item i,
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      position: absolute;
+      font-size: 20px;
+      color: #a9a9a9;
+    }
+
+    .item i {
+      right: 2%;
+      top: 30px;
+      z-index: 1;
+    }
+
+    [type="date"]::-webkit-calendar-picker-indicator {
+      right: 1%;
+      z-index: 2;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    input[type=radio] {
+      display: none;
+    }
+
+    label.radio {
+      position: relative;
+      display: inline-block;
+      margin: 5px 20px 10px 0;
+      cursor: pointer;
+    }
+
+    .question span {
+      margin-left: 30px;
+    }
+
+    span.required {
+      margin-left: 0;
+      color: red;
+    }
+
+    label.radio:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      border: 2px solid #ccc;
+    }
+
+    input[type=radio]:checked+label:before,
+    label.radio:hover:before {
+      border: 2px solid #1c87c9;
+    }
+
+    label.radio:after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 5px;
+      width: 8px;
+      height: 4px;
+      border: 3px solid #1c87c9;
+      border-top: none;
+      border-right: none;
+      transform: rotate(-45deg);
+      opacity: 0;
+    }
+
+    input[type=radio]:checked+label:after {
+      opacity: 1;
+    }
+
+    .btn-block {
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    button {
+      width: auto;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      background: #1c87c9;
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1e6fa0;
+    }
+
+    @media (min-width: 568px) {
+
+      .name-item,
+      .contact-item,
+      .position-item {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+
+      .name-item input {
+        width: calc(50% - 20px);
+      }
+
+      .contact-item .item,
+      .position-item .item {
+        width: calc(50% - 8px);
+      }
+
+      .contact-item input,
+      .position-item input {
+        width: calc(100% - 12px);
+      }
+
+      .position-item select {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="testbox">
+    <form action="http://localhost:3000/uploadFile" method="POST" enctype="multipart/form-data">
+      <div class="banner">
+        <h1>Generate Daily Report</h1>
+      </div>
+      <p class="top-info">Made by <a href="https://sylitas.com" target="_blank">Sylitas</a></p>
+      <div class="position-item">
+        <div class="item">
+          <p>Choose client<span class="required">*</span></p>
+          <select name="name" required>
+            <option value="Đỗ Xuân Nam">Đỗ Xuân Nam</option>
+            <option value="Ngô Văn Tân">Ngô Văn Tân</option>
+            <option value="Đỗ Xuân Đức">Đỗ Xuân Đức</option>
+            <option value="Phạm Thị Hiền">Phạm Thị Hiền</option>
+            <option value="Nguyễn Đình Khang">Nguyễn Đình Khang</option>
+            <option value="Nguyễn Trung Hậu">Nguyễn Trung Hậu</option>
+            <option value="Lê Anh Thọ">Lê Anh Thọ</option>
+            <option value="Nguyễn Văn Long">Nguyễn Văn Long</option>
+            <option value="Đặng Văn Tứ">Đặng Văn Tứ</option>
+          </select>
+        </div>
+        <div class="item">
+          <p>Choose date<span class="required">*</span></p>
+          <input type="date" name="date" required />
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+      </div>
+      <!-- <div class="question">
+        <p>What is your current employment status?<span class="required">*</span></p>
+        <div class="question-answer">
+          <div>
+            <input type="radio" value="none" id="radio_1" name="status" required />
+            <label for="radio_1" class="radio"><span>Employed</span></label>
+          </div>
+          <div>
+            <input type="radio" value="none" id="radio_2" name="status" required />
+            <label for="radio_2" class="radio"><span>Self-Employed</span></label>
+          </div>
+          <div>
+            <input type="radio" value="none" id="radio_3" name="status" required />
+            <label for="radio_3" class="radio"><span>Unemployed</span></label>
+          </div>
+          <div>
+            <input type="radio" value="none" id="radio_4" name="status" required />
+            <label for="radio_4" class="radio"><span>Student</span></label>
+          </div>
+        </div>
+      </div> -->
+      <div class="item">
+        <p>Submit Excel file</p>
+        <p>Tips: You can upload a file and then keep using it until you uploaded a new one</p>
+        <input type="file" name="excelFile" accept=".xlsx">
+      </div>
+      <!-- <div class="question">
+        <p>Would you like to keep using uploaded file ?</p>
+        <div class="question-answer">
+          <div>
+            <input type="radio" value="true" id="radio_5" name="isUse" />
+            <label for="radio_5" class="radio"><span>Yes</span></label>
+          </div>
+          <div>
+            <input type="radio" value="false" id="radio_6" name="isUse" />
+            <label for="radio_6" class="radio"><span>No</span></label>
+          </div>
+        </div>
+      </div> -->
+      <div class="btn-block">
+        <button type="submit">Generate PDF File</button>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>
