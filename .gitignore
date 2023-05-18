@@ -3,3 +3,4 @@ node_modules
 paymentReceipt-win32-x64
 uploads/*
 public/paymentReceipt.pdf
+env.js

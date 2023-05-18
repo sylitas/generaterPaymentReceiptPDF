@@ -10,7 +10,7 @@ const {
   phoneNumber,
   reportConfig,
   vat
-} = require('../env');
+} = require('../env.sample');
 const { convertHTML2PDF } = require('./generatePDF');
 
 const generateData = (date, employeeInfo) => {
@@ -60,7 +60,12 @@ const generateData = (date, employeeInfo) => {
 
     const moneyInVietnamese = toVietnamese(pdfData.totalPay);
 
-    pdfData.inVietnamese = moneyInVietnamese.charAt(0).toUpperCase() + moneyInVietnamese.slice(1);
+    if (pdfData.totalPay !== 0) {
+      pdfData.inVietnamese = moneyInVietnamese.charAt(0).toUpperCase() + moneyInVietnamese.slice(1) + ' đồng';
+    } else {
+      pdfData.inVietnamese = 'Không đồng'
+    }
+
 
     pdfData.taxVAT = pdfData.taxVAT.toLocaleString();
     pdfData.totalPay = pdfData.totalPay.toLocaleString();
