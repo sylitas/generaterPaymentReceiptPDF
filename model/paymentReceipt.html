@@ -65,7 +65,7 @@
     <img src="http://localhost:3000/logo.png" width="$wxh" height="$wxh"
       style="z-index: 99;float: left;margin-left: $spaceLeft;">
     <h4 class="center">
-      <nobr><u><b>BÁO CÁO BÁN HÀNG HÀNG NGÀY</b></u></nobr>
+      <nobr><u><b>BÁO CÁO BÁN HÀNG HÀNG NGÀY KIÊM PHIẾU THU TIỀN</b></u></nobr>
     </h4>
     <br>
     <i>Công ty TNHH Phát triển TM & DV Xuân Duy</i>
@@ -83,8 +83,8 @@
         <td><b>SL hàng nhận (Gói)</b></td>
         <td><b>SL hàng trả lại (Gói)</b></td>
         <td><b>SL hàng bán (Gói)</b></td>
-        <td><b>Đơn giá (Vnđ)</b></td>
-        <td><b>Thành tiền</b></td>
+        <td><b>Đơn giá chưa VAT (Vnđ)</b></td>
+        <td><b>Thành tiền (Vnđ)</b></td>
       </tr>
       {{#each tobaccos}}
       <tr>
@@ -98,13 +98,24 @@
       </tr>
       {{/each}}
       <tr>
-        <td></td>
-        <td><b>Tổng</b></td>
+        <td colspan="2"><b>Tổng cộng</b></td>
         <td>{{total.receive}}</td>
         <td>{{total.return}}</td>
         <td>{{total.sold}}</td>
         <td></td>
         <td>{{total.total}}</td>
+      </tr>
+      <tr>
+        <td colspan="6" style="text-align: right;"><b>Thuế VAT (10%)</b></td>
+        <td colspan="1">{{taxVAT}}</td>
+      </tr>
+      <tr>
+        <td colspan="6" style="text-align: right;"><b>Tổng thanh toán</b></td>
+        <td colspan="1">{{totalPay}}</td>
+      </tr>
+      <tr>
+        <td colspan="2"><b>Bằng chữ</b></td>
+        <td colspan="5">{{inVietnamese}} đồng</td>
       </tr>
     </table>
   </div>
@@ -115,12 +126,12 @@
     <div class="nvbh column" style="text-align: center;">
       <p><b>Nhân viên bán hàng</b></p>
       <p>( Ký xác nhận )</p>
-      <img id="pic" src="$imgSrc" width="auto" height="60">
-      <p><b>{{employeeName}}</b></p>
+      <p style="padding-top: $signatureHeigh;"><b>{{employeeName}}</b></p>
     </div>
     <div class="tktq column" style="text-align: center;">
       <p><b>Thủ kho/Thủ quỹ</b></p>
       <p>( Ký xác nhận )</p>
+      <p style="padding-top: $signatureHeigh;"><b>Nguyễn Xuân Soan</b></p>
     </div>
   </div>
 </body>

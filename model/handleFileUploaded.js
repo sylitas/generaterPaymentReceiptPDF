@@ -1,27 +1,27 @@
 const XLSX = require('xlsx');
 const fs = require('fs');
 
-const { excelDateToStringDateFormat, formatDate, convertValuesNumericToString } = require('./utils');
+const { excelDateToStringDateFormat, formatDate, convertValuesNumericToString, toVietnamese } = require('./utils');
+
 const {
   tobaccosType,
   employeeDetailInfo,
   address,
   phoneNumber,
-  reportConfig
+  reportConfig,
+  vat
 } = require('../env');
 const { convertHTML2PDF } = require('./generatePDF');
-
-let signatureUrl;
 
 const generateData = (date, employeeInfo) => {
   try {
     const sellInfo = employeeInfo.reduce((pre, cur) => {
       const tobaccoName = cur['Tên nhãn hiệu'].trim();
-      pre[tobaccoName].receive = cur['Số lượng nhận'];
-      pre[tobaccoName].return = cur['Số lượng trả lại'];
-      pre[tobaccoName].sold = cur['Số lượng bán'];
-      pre[tobaccoName].total = cur['Thành tiền giá hóa đơn'];
-      pre[tobaccoName].price = cur['Giá hóa đơn đã bao gồm VAT'];
+      pre[tobaccoName].receive = cur['Số lượng nhận'] || 0;
+      pre[tobaccoName].return = cur['Số lượng trả lại'] || 0;
+      pre[tobaccoName].sold = cur['Số lượng bán'] || 0;
+      pre[tobaccoName].total = Math.round(cur['Thành tiền giá hóa đơn'] || 0);
+      pre[tobaccoName].price = tobaccosType[tobaccoName].price;
 
       return pre;
     }, Object.keys(tobaccosType).reduce((pre, cur) => {
@@ -30,9 +30,8 @@ const generateData = (date, employeeInfo) => {
     }, {}));
 
     const employeeName = employeeInfo[0]['Tên nhân viên'];
-    signatureUrl = employeeDetailInfo[employeeName].signature;
 
-    return {
+    const pdfData = {
       day: date.split('-')[1],
       month: date.split('-')[0],
       year: date.split('-')[2],
@@ -40,20 +39,34 @@ const generateData = (date, employeeInfo) => {
       address,
       phone: phoneNumber,
       employeePhone: employeeDetailInfo[employeeName].phone,
-      total: convertValuesNumericToString(Object.keys(sellInfo).reduce((pre, cur) => {
+      total: Object.keys(sellInfo).reduce((pre, cur) => {
         pre.receive += sellInfo[cur].receive;
         pre.return += sellInfo[cur].return;
         pre.sold += sellInfo[cur].sold;
         pre.total += sellInfo[cur].total;
 
         return pre;
-      }, { receive: 0, return: 0, sold: 0, total: 0 })),
+      }, { receive: 0, return: 0, sold: 0, total: 0 }),
       tobaccos: Object.keys(sellInfo).map((tobacco, index) => ({
         stt: index + 1,
         name: tobacco,
         info: convertValuesNumericToString(sellInfo[tobacco]),
       }))
     }
+
+    pdfData.taxVAT = Math.round(pdfData.total.total * vat);
+
+    pdfData.totalPay = pdfData.total.total + pdfData.taxVAT;
+
+    const moneyInVietnamese = toVietnamese(pdfData.totalPay);
+
+    pdfData.inVietnamese = moneyInVietnamese.charAt(0).toUpperCase() + moneyInVietnamese.slice(1);
+
+    pdfData.taxVAT = pdfData.taxVAT.toLocaleString();
+    pdfData.totalPay = pdfData.totalPay.toLocaleString();
+    pdfData.total = convertValuesNumericToString(pdfData.total);
+
+    return pdfData;
   } catch (error) {
     console.error('😎 Sylitas | An unexpected error when generating data', error);
     throw error;
@@ -62,10 +75,10 @@ const generateData = (date, employeeInfo) => {
 
 const generateTemplateHTML = (path = `${__dirname}/paymentReceipt.html`) => {
   let htmlContent = fs.readFileSync(path, "utf8");
-  htmlContent = htmlContent.replace('$imgSrc', signatureUrl);
-  htmlContent = htmlContent.replace('$fontSize', reportConfig.fontSize);
-  htmlContent = htmlContent.replace('$wxh', reportConfig.logoConfig.wxh);
-  htmlContent = htmlContent.replace('$spaceLeft', reportConfig.logoConfig.spaceLeft);
+  htmlContent = htmlContent.replaceAll('$fontSize', reportConfig.fontSize);
+  htmlContent = htmlContent.replaceAll('$wxh', reportConfig.logoConfig.wxh);
+  htmlContent = htmlContent.replaceAll('$spaceLeft', reportConfig.logoConfig.spaceLeft);
+  htmlContent = htmlContent.replaceAll('$signatureHeigh', reportConfig.signatureHeigh);
   return htmlContent;
 }
 
@@ -107,8 +120,8 @@ exports.handleFileUploaded = async (req, res) => {
 
     require('child_process').exec('start http://localhost:3000/pdf');
 
-    res.redirect('http://localhost:3000/');
+    return res.redirect('http://localhost:3000/');
   } catch (error) {
-    res.redirect('http://localhost:3000/error');
+    return res.redirect('http://localhost:3000/error');
   }
 }
