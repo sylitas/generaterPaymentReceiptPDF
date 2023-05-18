@@ -270,7 +270,7 @@
         </div>
         <div class="item">
           <p>Choose date<span class="required">*</span></p>
-          <input type="date" name="date" required />
+          <input id="datePicker" type="date" name="date" required />
           <i class="fas fa-calendar-alt"></i>
         </div>
       </div>
@@ -319,5 +319,9 @@
     </form>
   </div>
 </body>
+
+<script>
+  document.getElementById('datePicker').valueAsDate = new Date();
+</script>
 
 </html>

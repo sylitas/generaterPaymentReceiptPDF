@@ -8,7 +8,9 @@
     "prestart": "npm run clean && cp env.sample.js env.js",
     "start": "nodemon --exec electron main.js",
     "prebuild": "npm run clean && node config.env.js",
-    "build": "electron-packager ./ --platform=win32 --arch=x64 paymentReceipt --overwrite"
+    "build": "electron-packager ./ --platform=win32 --arch=x64 paymentReceipt --overwrite",
+    "prerelease": "rm -rf E:/paymentReceipt",
+    "release": "cp -R ./paymentReceipt-win32-x64 E:/paymentReceipt"
   },
   "keywords": [],
   "author": "Sylitas",

@@ -10,7 +10,7 @@ const {
   phoneNumber,
   reportConfig,
   vat
-} = require('../env.sample');
+} = require('../env');
 const { convertHTML2PDF } = require('./generatePDF');
 
 const generateData = (date, employeeInfo) => {
@@ -21,7 +21,7 @@ const generateData = (date, employeeInfo) => {
       pre[tobaccoName].return = cur['Số lượng trả lại'] || 0;
       pre[tobaccoName].sold = cur['Số lượng bán'] || 0;
       pre[tobaccoName].total = Math.round(cur['Thành tiền giá hóa đơn'] || 0);
-      pre[tobaccoName].price = tobaccosType[tobaccoName].price;
+      pre[tobaccoName].price = cur['Giá hóa đơn đã bao gồm VAT'] || 0;
 
       return pre;
     }, Object.keys(tobaccosType).reduce((pre, cur) => {

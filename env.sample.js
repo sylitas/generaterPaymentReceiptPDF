@@ -31,7 +31,6 @@ exports.phoneNumber = '092.107.4444';
 
 exports.reportConfig = {
   fontSize: "12px",
-  imgHeigh: "60",
   logoConfig: {
     wxh: "50",
     spaceLeft: "70px"
