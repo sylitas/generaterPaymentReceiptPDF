@@ -1,3 +1,5 @@
 node_modules
 .vscode
 paymentReceipt-win32-x64
+uploads/*
+public/paymentReceipt.pdf
