@@ -4,7 +4,7 @@
   "description": "Generate payment receipt pdf",
   "main": "main.js",
   "scripts": {
-    "clean": "rm -rf uploads/* && rm -rf public/*.pdf",
+    "clean": "rm -rf uploads/* && rm -rf public/*.pdf && rm -rf public/pdfs && rm -rf public/*.zip",
     "prestart": "npm run clean && cp env.sample.js env.js",
     "start": "nodemon --exec electron main.js",
     "prebuild": "npm run clean && node config.env.js",
@@ -16,6 +16,7 @@
   "author": "Sylitas",
   "license": "ISC",
   "dependencies": {
+    "archiver": "^5.3.1",
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
     "multer": "^1.4.5-lts.1",

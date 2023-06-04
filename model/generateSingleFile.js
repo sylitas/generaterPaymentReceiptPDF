@@ -21,7 +21,7 @@ const generateData = (date, employeeInfo) => {
       pre[tobaccoName].return = cur['Số lượng trả lại'] || 0;
       pre[tobaccoName].sold = cur['Số lượng bán'] || 0;
       pre[tobaccoName].total = Math.round(cur['Thành tiền giá hóa đơn'] || 0);
-      pre[tobaccoName].price = cur['Giá hóa đơn đã bao gồm VAT'] || 0;
+      pre[tobaccoName].price = cur[' Giá hóa đơn chưa bao gồm VAT '] || 0;
 
       return pre;
     }, Object.keys(tobaccosType).reduce((pre, cur) => {
@@ -87,46 +87,34 @@ const generateTemplateHTML = (path = `${__dirname}/paymentReceipt.html`) => {
   return htmlContent;
 }
 
-exports.handleFileUploaded = async (req, res) => {
-  const { name: employeeName, date: printDate } = req.body;
-  const file = req.file;
+exports.generateSingleFile = async (file, data, outputPath = `${__dirname}/../public/paymentReceipt.pdf`) => {
+  const { name: employeeName, date: printDate } = data;
+  let workbook;
   try {
-    let workbook;
-    try {
-      workbook = XLSX.readFile(file.path);
-    } catch (error) {
-      workbook = XLSX.readFile(`${__dirname}/../uploads/reportMonthly.xlsx`);
-    }
-    const sheet_name_list = workbook.SheetNames;
-    const xlDataArr = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-    const date = formatDate(printDate);
-
-    const employeeInfo = xlDataArr.filter((xlData) => {
-      const xlData_date = excelDateToStringDateFormat(xlData['Ngày'], 'mm-dd-yyyy');
-      const xlData_name = xlData['Tên nhân viên'];
-      return (xlData_date === date && xlData_name === employeeName)
-    });
-
-    // Get the data from Excel file and modify it
-    const dataRaw = generateData(date, employeeInfo);
-    console.log('😎 Sylitas | Generate data for export PDF successfully');
-
-    console.log('😎 Sylitas | dataRaw : ', dataRaw);
-
-    // Generate HTML as a template
-    const template = generateTemplateHTML();
-    console.log('😎 Sylitas | Generate template successfully');
-
-    // Convert HTML to PDF
-    const outputPath = `${__dirname}/../public/paymentReceipt.pdf`;
-    await convertHTML2PDF(template, dataRaw, outputPath);
-
-    console.log('😎 Sylitas | Generate PDF successfully');
-
-    require('child_process').exec('start http://localhost:3000/pdf');
-
-    return res.redirect('http://localhost:3000/');
+    workbook = XLSX.readFile(file.path);
   } catch (error) {
-    return res.redirect('http://localhost:3000/error');
+    workbook = XLSX.readFile(`${__dirname}/../uploads/reportMonthly.xlsx`);
   }
+  const sheet_name_list = workbook.SheetNames;
+  const xlDataArr = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
+  const date = formatDate(printDate);
+
+  const employeeInfo = xlDataArr.filter((xlData) => {
+    const xlData_date = excelDateToStringDateFormat(xlData['Ngày'], 'mm-dd-yyyy');
+    const xlData_name = xlData['Tên nhân viên'];
+    return (xlData_date === date && xlData_name === employeeName)
+  });
+
+  // Get the data from Excel file and modify it
+  const dataRaw = generateData(date, employeeInfo);
+  console.log('😎 Sylitas | Generate data for export PDF successfully');
+
+  // Generate HTML as a template
+  const template = generateTemplateHTML();
+  console.log('😎 Sylitas | Generate template successfully');
+
+  // Convert HTML to PDF
+  await convertHTML2PDF(template, dataRaw, outputPath);
+
+  console.log('😎 Sylitas | Generate PDF successfully');
 }
